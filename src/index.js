@@ -6,32 +6,37 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route, Switch, Prio } from 'react-router-dom';
 import { Redirect } from 'react-router';
 
+import Authentication from './services/authentication'
+import Register from './components/register';
+import Login from './components/login';
 import DrawingBoard from './components/drawingBoard'; 
 import websocket from './components/websocket'
 
-// const PrivateRoute = ({ component: Component, ...rest }) => (
-//   <Route
-//     {...rest}
-//     render={props =>
-//       Authentication.getToken() ? (
-//         <Component {...props} />
-//       ) : (
-//         <Redirect
-//           to={{
-//             pathname: '/login',
-//             state: { from: props.location }
-//           }}
-//         />
-//       )
-//     }
-//   />
-// );
+const PrivateRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={props =>
+      Authentication.getToken() ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/login',
+            state: { from: props.location }
+          }}
+        />
+      )
+    }
+  />
+);
 
 ReactDOM.render(
   <Router>
     <div>
-      <Route exact path="/" component={DrawingBoard} />
-      <Route exact path='/socket' component={websocket} />
+      <PrivateRoute exact path="/" component={Login} />
+      <Route path="/login" component={Login} />
+      <Route exact path="/register" component={Register}/>
+      <PrivateRoute exact path='/socket' component={websocket} />
     </div>
   </Router>,
   document.getElementById('root')
