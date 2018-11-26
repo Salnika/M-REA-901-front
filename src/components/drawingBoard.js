@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Immutable from 'immutable';
+import io from 'socket.io-client';
+import _ from 'lodash';
 import './drawingBoard.css';
 
 class DrawingBoard extends Component {
@@ -7,13 +9,18 @@ class DrawingBoard extends Component {
     super();
 
     this.state = {
-      lines: new Immutable.List(),
+      lines: [],
       isDrawing: false,
     };
 
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
+
+    this.socket = io.connect('http://localhost:3020');
+    this.socket.on('updateLines', (data) => {
+      this.setState({ lines: data.lines });
+    });
   }
 
   componentDidMount() {
@@ -31,8 +38,10 @@ class DrawingBoard extends Component {
 
     const point = this.relativeCoordinatesForEvent(mouseEvent);
 
+    const lines = this.state.lines;
+    lines.push([point]);
     this.setState(prevState => ({
-      lines: prevState.lines.push(new Immutable.List([point])),
+      lines,
       isDrawing: true,
     }));
   }
@@ -44,21 +53,22 @@ class DrawingBoard extends Component {
 
     const point = this.relativeCoordinatesForEvent(mouseEvent);
 
-    this.setState(prevState => ({
-      lines: prevState.lines.updateIn([prevState.lines.size - 1], line => line.push(point)),
-    }));
+    const lines = this.state.lines;
+    lines[lines.length - 1].push(point);
+    this.setState({ lines });
   }
 
   handleMouseUp() {
     this.setState({ isDrawing: false });
+    this.socket.emit('updateLines', { lines: this.state.lines });
   }
 
   relativeCoordinatesForEvent(mouseEvent) {
     const boundingRect = this.refs.drawArea.getBoundingClientRect();
-    return new Immutable.Map({
+    return {
       x: mouseEvent.clientX - boundingRect.left,
       y: mouseEvent.clientY - boundingRect.top,
-    });
+    };
   }
 
   render() {
@@ -86,7 +96,7 @@ function Drawing({ lines }) {
 }
 
 function DrawingLine({ line }) {
-  const pathData = `M ${line.map(p => `${p.get('x')} ${p.get('y')}`).join(' L ')}`;
+  const pathData = `M ${line.map(p => `${p.x} ${p.y}`).join(' L ')}`;
 
   return <path className="path" d={pathData} />;
 }
