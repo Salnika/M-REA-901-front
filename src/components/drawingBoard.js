@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Immutable from 'immutable';
 import io from 'socket.io-client';
 import _ from 'lodash';
 import './drawingBoard.css';
