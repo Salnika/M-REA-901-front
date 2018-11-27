@@ -22,7 +22,7 @@ const styles = {
   },
 };
 
-class TemporaryDrawer extends React.Component {
+class ChannelList extends React.Component {
   constructor(props) {
     super(props);
     this.handleChannelChange = this.handleChannelChange.bind(this);
@@ -77,6 +77,7 @@ class TemporaryDrawer extends React.Component {
     return (
       <div>
         <Button onClick={this.toggleDrawer('menu', true)}>Open menu</Button>
+        <h3>Current channel: {this.state.channel}</h3>
         <Drawer open={this.state.menu} onClose={this.toggleDrawer('left', false)}>
           <div
             tabIndex={0}
@@ -95,8 +96,4 @@ class TemporaryDrawer extends React.Component {
   }
 }
 
-TemporaryDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(TemporaryDrawer);
+export default withStyles(styles)(ChannelList);
