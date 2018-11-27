@@ -10,7 +10,8 @@ import Authentication from './services/authentication'
 import Register from './components/register';
 import Login from './components/login';
 import DrawingBoard from './components/drawingBoard'; 
-import websocket from './components/websocket'
+import websocket from './components/channel'
+import channelsList from './pages/channels';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -34,9 +35,9 @@ ReactDOM.render(
   <Router>
     <div>
       <PrivateRoute exact path="/" component={Login} />
+      <PrivateRoute exact path="/channels" component={channelsList} />
       <Route path="/login" component={Login} />
       <Route exact path="/register" component={Register}/>
-      <PrivateRoute exact path='/socket' component={websocket} />
     </div>
   </Router>,
   document.getElementById('root')

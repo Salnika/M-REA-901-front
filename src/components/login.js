@@ -35,7 +35,7 @@ class Login extends Component {
 
   render() {
     if (this.state.logged) {
-      return <Redirect to="/" />;
+      return <Redirect to="/channels" />;
     }
     return (
       <div className="login">
