@@ -10,6 +10,10 @@ import './login.css';
 import Users from '../services/users';
 import Authentication from '../services/authentication';
 
+const style = {
+  margin: 15,
+};
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +27,7 @@ class Login extends Component {
   async handleLogin() {
     Users.login(this.state.email, this.state.password)
       .then((resp) => {
-        if (resp.status == 200) {
+        if (resp.status === 200) {
           Authentication.save(resp.data);
           this.setState({ logged: true });
         } else {
@@ -65,7 +69,4 @@ class Login extends Component {
     );
   }
 }
-const style = {
-  margin: 15,
-};
 export default Login;

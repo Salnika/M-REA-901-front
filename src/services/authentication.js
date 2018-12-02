@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 class Authentication {
   static save(user) {
-    _.map(_.keys(user), key => {
+    _.map(_.keys(user), (key) => {
       localStorage.setItem(`user.${key}`, user[key]);
     });
   }

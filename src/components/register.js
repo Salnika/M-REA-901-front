@@ -9,6 +9,10 @@ import TextField from 'material-ui/TextField';
 import Users from '../services/users';
 import './login.css';
 
+const style = {
+  margin: 15,
+};
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +36,11 @@ class Register extends Component {
   }
 
   handleGoToLogin() {
-    this.setState({ goTologin: true });
+    if (this.state.repeatPassword !== this.state.password) {
+      alert('Passwords missmatch');
+    } else {
+      this.setState({ goTologin: true });
+    }
   }
 
   render() {
@@ -106,7 +114,5 @@ class Register extends Component {
     );
   }
 }
-const style = {
-  margin: 15,
-};
+
 export default Register;

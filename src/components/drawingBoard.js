@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
-import _ from 'lodash';
 import './drawingBoard.css';
 
 class DrawingBoard extends Component {
@@ -11,7 +10,6 @@ class DrawingBoard extends Component {
       lines: [],
       isDrawing: false,
     };
-
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
     this.handleMouseUp = this.handleMouseUp.bind(this);
@@ -31,7 +29,7 @@ class DrawingBoard extends Component {
   }
 
   handleMouseDown(mouseEvent) {
-    if (mouseEvent.button != 0) {
+    if (mouseEvent.button !== 0) {
       return;
     }
 
@@ -63,7 +61,7 @@ class DrawingBoard extends Component {
   }
 
   relativeCoordinatesForEvent(mouseEvent) {
-    const boundingRect = this.refs.drawArea.getBoundingClientRect();
+    const boundingRect = this.drawArea.getBoundingClientRect();
     return {
       x: mouseEvent.clientX - boundingRect.left,
       y: mouseEvent.clientY - boundingRect.top,
@@ -74,9 +72,10 @@ class DrawingBoard extends Component {
     return (
       <div
         className="drawArea"
-        ref="drawArea"
+        ref={el => (this.drawArea = el)}
         onMouseDown={this.handleMouseDown}
         onMouseMove={this.handleMouseMove}
+        role="OnMouseMove"
       >
         <Drawing lines={this.state.lines} />
       </div>

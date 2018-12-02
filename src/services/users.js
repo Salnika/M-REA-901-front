@@ -1,4 +1,4 @@
-import API from './api.js';
+import API from './api';
 
 class Users {
   static list() {
@@ -12,13 +12,6 @@ class Users {
   static get() {}
 
   static create(email, password, username) {
-    console.log({
-      email,
-      password,
-      role: 'user',
-      firstName: username,
-      lastName: username,
-    });
     return API.get().post('/users', {
       email,
       password,
