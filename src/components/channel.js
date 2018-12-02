@@ -1,6 +1,10 @@
 import React from 'react';
 import io from 'socket.io-client';
 import _ from 'lodash';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
+import './channel.css';
 
 class channel extends React.Component {
   constructor(props) {
@@ -55,21 +59,21 @@ class channel extends React.Component {
   render() {
     const rows = this.buildRows(this.state.messageHistory);
     return (
-      <div>
+      <MuiThemeProvider>
+      <div class="chatList">
         <div className="pt-card pt-card-elevation-0">
           <table className="pt-html-table pt-html-table-bordered">
             <tbody>{rows}</tbody>
           </table>
         </div>
-        <div>
+        <div class="chatbar">
           <br />
           Message:
-          <input type="text" onChange={this.handleMessageType} value={this.state.message} />
-          <button type="button" onClick={this.sendMessageAction}>
-            Send
-          </button>
+          <TextField class ="chatInput" type="text"  width="80%" onChange={this.handleMessageType} value={this.state.message} />
+          <RaisedButton  label="Send" onClick={this.sendMessageAction} />
         </div>
       </div>
+      </MuiThemeProvider>
     );
   }
 }

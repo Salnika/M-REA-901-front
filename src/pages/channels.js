@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
@@ -11,7 +11,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import CloseIcon from '@material-ui/icons/Close';
 import ListIcon from '@material-ui/icons/List';
 import Channel from '../components/channel.js';
-import User from '../services/users.js';
+import DrawingBoard from '../components/drawingBoard.js';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Auth from '../services/authentication';
 
 const styles = {
   list: {
@@ -26,9 +32,11 @@ class ChannelList extends React.Component {
   constructor(props) {
     super(props);
     this.handleChannelChange = this.handleChannelChange.bind(this);
+    this.actionLogout = this.actionLogout.bind(this);
     this.state = {
       menu: false,
       channel: 'General',
+      logged: true,
     };
   }
 
@@ -43,7 +51,16 @@ class ChannelList extends React.Component {
     this.forceUpdate();
   }
 
+  actionLogout() {
+    console.log('here');
+    Auth.logout();
+    this.setState({ logged: false });
+  }
+
   render() {
+    if (!this.state.logged) {
+      return <Redirect to="/login" />;
+    }
     const { classes } = this.props;
 
     const sideList = (
@@ -55,13 +72,8 @@ class ChannelList extends React.Component {
             </ListItemIcon>
             <ListItemText primary={'close menu'} />
           </ListItem>
-          <ListItem key={'channels'}>
-            <ListItemIcon>
-              <ListIcon />
-            </ListItemIcon>
-            <ListItemText primary={'Channels'} />
-          </ListItem>
-          {['General', 'random', 'Work'].map((text, index) => (
+          <Divider />
+          {['General', 'random', 'Work', 'Draw'].map((text, index) => (
             <ListItem button onClick={this.handleChannelChange} key={index} value={text}>
               <ListItemIcon>
                 <ListIcon />
@@ -71,13 +83,40 @@ class ChannelList extends React.Component {
           ))}
         </List>
         <Divider />
+        <List>
+          <ListItem button key={'Logout'} onClick={this.actionLogout}>
+            <ListItemIcon>
+              <CloseIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Logout'} />
+          </ListItem>
+        </List>
       </div>
     );
+    let channelDiv = (
+      <Channel userName={localStorage.getItem('user.firstName')} channel={this.state.channel} />
+    );
+    if (this.state.channel === 'Draw') {
+      channelDiv = <DrawingBoard />;
+    }
 
     return (
       <div>
-        <Button onClick={this.toggleDrawer('menu', true)}>Open menu</Button>
-        <h3>Current channel: {this.state.channel}</h3>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              onClick={this.toggleDrawer('menu', true)}
+              className={classes.menuButton}
+              color="inherit"
+              aria-label="Menu"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              {this.state.channel}
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <Drawer open={this.state.menu} onClose={this.toggleDrawer('left', false)}>
           <div
             tabIndex={0}
@@ -88,9 +127,7 @@ class ChannelList extends React.Component {
             {sideList}
           </div>
         </Drawer>
-        <div>
-          <Channel userName={localStorage.getItem('user.firstName')} channel={this.state.channel} />
-        </div>
+        <div>{channelDiv}</div>
       </div>
     );
   }

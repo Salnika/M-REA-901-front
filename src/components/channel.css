@@ -1,0 +1,16 @@
+.chatList {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.chatbar {
+  background-color: lightblue;
+  text-align: center;
+}
+
+.chatInput {
+  width:80%;
+  background-color: white;
+}

@@ -91,6 +91,7 @@ class Register extends Component {
               onChange={(event, newValue) => this.setState({ repeatPassword: newValue })}
             />
             <br />
+            <br />
             <Link to="/login">Have an account ? Go to login page</Link>
             <br />
             <RaisedButton
