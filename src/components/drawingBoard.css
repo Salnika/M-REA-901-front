@@ -4,8 +4,8 @@ body {
 }
 
 .drawArea {
-  width: 800px;
-  height: 500px;
+  width: 100%;
+  height:700px;
   border: 1px solid black;
   float: left;
   cursor: crosshair;
