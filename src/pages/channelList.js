@@ -48,11 +48,9 @@ class ChannelList extends React.Component {
 
   handleChannelChange(e) {
     this.setState({ channel: e.target.textContent });
-    console.log(this.state.channel);
   }
 
   actionLogout() {
-    console.log('here');
     Auth.logout();
     this.setState({ logged: false });
   }

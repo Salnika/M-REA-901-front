@@ -35,7 +35,6 @@ class channel extends React.Component {
     this.setState({ channel: nextProps.channel });
     this.setState({ messageHistory: [] });
     this.socket.emit('join', { channel: nextProps.channel });
-    console.log(this.state.messageHistory);
   }
 
   handleMessageType(e) {
